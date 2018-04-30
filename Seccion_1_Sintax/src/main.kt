@@ -7,11 +7,30 @@
 fun main(args: Array<String>){
   println("Hello world")
 
-  stringTemplate()
-  conditions()
-  switchCondition()
-  arrays()
+  //stringTemplate()
+  //conditions()
+  //switchCondition()
+  //arrays()
 
+  val num1 = 4
+  val num2 = 8
+
+  val result = onLineFUnc(num1 = num1 ,num2 = num2)
+
+  println(result)
+
+
+  val numeros = intArrayOf(1,2,3,4,5,6)
+
+  numeros.extensionFunc(0, 4)
+
+  println(numeros[0])
+
+
+
+  var resta = 6 menos 3
+
+  println("Resultado funcion INFIX: $resta")
 }
 
 /**
@@ -85,5 +104,43 @@ fun cicloWhile(array: Array<Int>){
     println(array[indx])
     ++indx
   }
+}
+
+/**
+ * Nullables Optionals & Required
+ */
+fun nullable (){
+  var value : String? = null
+
+
+  //  SAFE CALL OPERATOR => ?
+  // REQUIRED OPERATOR !!
+  var value2 : String = value!!
 
 }
+
+/**
+ * One lien func
+ */
+fun onLineFUnc(num1 : Int, num2 : Int): Int = num1 + num2
+
+/**
+ * funciones de extension
+ */
+fun IntArray.extensionFunc(indx1: Int, indx2 : Int){
+  val temp = this[indx1]
+
+  this[indx1] = this[2]
+
+  this[indx2] = temp
+}
+
+/**
+ * Funciones Infix
+ *
+ * Restricciones:
+ * 1. Miembros de una clase o funciones de extension
+ * 2. Deben tener un parametro
+ * 3. Deben estar marcadas por la palabra infix
+ */
+ infix fun Int.menos(num: Int) = this - num
