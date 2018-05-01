@@ -31,6 +31,12 @@ fun main(args: Array<String>){
   var resta = 6 menos 3
 
   println("Resultado funcion INFIX: $resta")
+
+  /**
+   * Reflexion
+   */
+
+  Reflection.getClassName("abcde")
 }
 
 /**
