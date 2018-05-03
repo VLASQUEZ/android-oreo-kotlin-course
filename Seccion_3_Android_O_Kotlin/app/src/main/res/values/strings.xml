@@ -1,0 +1,12 @@
+<resources>
+  <string name="app_name">Seccion_3_Android_O_Kotlin</string>
+  <string name="txt_title">Haz una pregunta y presiona el botón</string>
+  <string name="btn_press_title">Button</string>
+
+  <string-array name="phrases">
+    <item>SI</item>
+    <item>NO</item>
+    <item>TAL VEZ</item>
+    <item>INTENTALO DE NUEVO</item>
+  </string-array>
+</resources>
