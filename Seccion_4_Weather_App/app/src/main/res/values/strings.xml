@@ -2,8 +2,8 @@
   <string name="app_name">Seccion_4_Weather_App</string>
   <string name="no_data">No data</string>
   <string name="weather_img">weather_img</string>
-  <string name="celcius_temp">0.0 C</string>
-  <string name="weather_percent">0.0 %</string>
+  <string name="celcius_temp">%d ºC</string>
+  <string name="weather_percent">%d %%</string>
   <string name="lbl_temp">Temp</string>
   <string name="lbl_precip">Precip</string>
   <string name="btn_title_daily_weather">Daily weather</string>
