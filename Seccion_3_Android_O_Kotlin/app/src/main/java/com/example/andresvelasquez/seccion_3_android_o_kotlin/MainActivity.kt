@@ -61,7 +61,11 @@ class MainActivity : AppCompatActivity() {
   }
 
   override fun onRestoreInstanceState(savedInstanceState: Bundle) {
-    txt_title.text = savedInstanceState.getString(text)
-    txt_title.setTextColor(savedInstanceState.getInt(color))
+    with(savedInstanceState) {
+      txt_title.text = getString(text)
+      txt_title.setTextColor(getInt(color))
+    }
+
+    super.onRestoreInstanceState(savedInstanceState)
   }
 }
