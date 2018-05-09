@@ -6,7 +6,7 @@ import com.example.andresvelasquez.seccion_4_weather_app.R
 @autor Andrés Velasquez
 @since 6/05/18
  **/
-class Weather(
+data class Weather(
   var icon: String,
   var summary: String,
   var temp: Double,

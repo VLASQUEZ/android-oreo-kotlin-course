@@ -6,18 +6,20 @@ import android.support.design.widget.Snackbar
 import android.support.v4.content.res.ResourcesCompat
 import android.support.v7.app.AppCompatActivity
 import android.util.Log
-import android.widget.TextView
 import com.android.volley.Request.Method
 import com.android.volley.Response
 import com.android.volley.toolbox.StringRequest
 import com.android.volley.toolbox.Volley
 import com.example.andresvelasquez.seccion_4_weather_app.R
-import com.example.andresvelasquez.seccion_4_weather_app.R.id
 import com.example.andresvelasquez.seccion_4_weather_app.R.layout
 import com.example.andresvelasquez.seccion_4_weather_app.R.string
 import com.example.andresvelasquez.seccion_4_weather_app.api.DARK_SKY_API_KEY
 import com.example.andresvelasquez.seccion_4_weather_app.api.DARK_SKY_URL
-import com.example.andresvelasquez.seccion_4_weather_app.api.JSONParser
+import com.example.andresvelasquez.seccion_4_weather_app.api.getCurrentWeatherFromJSON
+import com.example.andresvelasquez.seccion_4_weather_app.api.getDailyWeatherFromJSON
+import com.example.andresvelasquez.seccion_4_weather_app.extensions.action
+import com.example.andresvelasquez.seccion_4_weather_app.extensions.displaySnack
+import com.example.andresvelasquez.seccion_4_weather_app.models.Day
 import com.example.andresvelasquez.seccion_4_weather_app.models.Weather
 import kotlinx.android.synthetic.main.activity_main.btn_daily_weather
 import kotlinx.android.synthetic.main.activity_main.btn_hourly_weather
@@ -31,7 +33,13 @@ import kotlin.math.roundToInt
 
 class MainActivity : AppCompatActivity() {
   val TAG = MainActivity::class.java.simpleName
-  val jsonParser = JSONParser()
+  //inicializa la variable justo cuando esta va a ser usada
+  lateinit var days: ArrayList<Day>
+
+  companion object {
+    val DAILY_WEATHER = "DAILY_WEATHER"
+  }
+
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
     setContentView(layout.activity_main)
@@ -54,7 +62,6 @@ class MainActivity : AppCompatActivity() {
     val url =
       "$DARK_SKY_URL/$DARK_SKY_API_KEY/$latitude,$longitude?lang=$language&units=$units"
 
-    val textView = findViewById<TextView>(id.text)
     // ...
 
     // Instantiate the RequestQueue.
@@ -63,23 +70,31 @@ class MainActivity : AppCompatActivity() {
     // Request a string response from the provided URL.
     val stringRequest = StringRequest(
         Method.GET, url,
-        Response.Listener<String> { response ->
-          val responseJson = JSONObject(response)
-          val currentWeather = jsonParser.getCurrentWeatherFromJSON(response = responseJson)
+        Response.Listener<String> {
+          val responseJson = JSONObject(it)
+          val currentWeather = getCurrentWeatherFromJSON(response = responseJson)
+
+          days = getDailyWeatherFromJSON(responseJson)
           bindCurrentWeather(currentWeather)
 
         },
         Response.ErrorListener {
           Log.d(TAG, "That didn't work!")
-          val snackbar = Snackbar.make(mainActivity, R.string.network_error, Snackbar.LENGTH_SHORT)
-              .setAction(getString(R.string.retry), {
-                getWeather()
-              })
-          snackbar.show()
+          showSnackbar()
         })
 
     // Add the request to the RequestQueue.
     queue.add(stringRequest)
+  }
+
+  private fun showSnackbar() {
+    mainActivity.displaySnack(
+        getString(R.string.network_error), Snackbar.LENGTH_INDEFINITE
+    ) {
+      action(getString(R.string.retry)) {
+        getWeather()
+      }
+    }
   }
 
   private fun bindCurrentWeather(weather: Weather) {
@@ -105,8 +120,10 @@ class MainActivity : AppCompatActivity() {
   }
 
   fun startDailyActivity() {
-    val intent = Intent()
-    intent.setClass(this, DailyWeatherActivity::class.java)
+    val intent = Intent(this, DailyWeatherActivity::class.java).apply {
+      putParcelableArrayListExtra(DAILY_WEATHER, days)
+    }
     startActivity(intent)
+
   }
 }
