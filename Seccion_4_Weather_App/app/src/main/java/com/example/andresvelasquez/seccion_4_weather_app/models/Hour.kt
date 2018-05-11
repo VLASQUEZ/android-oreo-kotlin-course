@@ -10,12 +10,12 @@ import java.util.TimeZone
 
 /**
  * @author <a href="avelasquez@clickdelivery.com">Andres Velasquez</a>
- * @since 8/05/18
+ * @since 10/05/18
  */
-data class Day(
+class Hour(
   val time: Long,
-  val minTemp: Double,
-  val maxTemp: Double,
+  val temp: Double,
+  val precip: Double,
   val timeZone: String
 ) : Parcelable {
 
@@ -31,8 +31,8 @@ data class Day(
     flags: Int
   ) {
     dest?.writeLong(time)
-    dest?.writeDouble(minTemp)
-    dest?.writeDouble(maxTemp)
+    dest?.writeDouble(temp)
+    dest?.writeDouble(precip)
     dest?.writeString(timeZone)
   }
 
@@ -40,18 +40,18 @@ data class Day(
     return 0
   }
 
-  companion object CREATOR : Creator<Day> {
-    override fun createFromParcel(parcel: Parcel): Day {
-      return Day(parcel)
+  companion object CREATOR : Creator<Hour> {
+    override fun createFromParcel(parcel: Parcel): Hour {
+      return Hour(parcel)
     }
 
-    override fun newArray(size: Int): Array<Day?> {
+    override fun newArray(size: Int): Array<Hour?> {
       return arrayOfNulls(size)
     }
   }
 
   fun getFormattedTime(): String {
-    val formatter = SimpleDateFormat("EEEE", Locale.US)
+    val formatter = SimpleDateFormat("h:mm a", Locale.US)
     formatter.timeZone = TimeZone.getTimeZone(timeZone)
     val date = Date(time * 1000)
     val dayOfWeek = formatter.format(date)

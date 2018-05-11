@@ -17,9 +17,11 @@ import com.example.andresvelasquez.seccion_4_weather_app.api.DARK_SKY_API_KEY
 import com.example.andresvelasquez.seccion_4_weather_app.api.DARK_SKY_URL
 import com.example.andresvelasquez.seccion_4_weather_app.api.getCurrentWeatherFromJSON
 import com.example.andresvelasquez.seccion_4_weather_app.api.getDailyWeatherFromJSON
+import com.example.andresvelasquez.seccion_4_weather_app.api.getHourlyWeatherFromJSON
 import com.example.andresvelasquez.seccion_4_weather_app.extensions.action
 import com.example.andresvelasquez.seccion_4_weather_app.extensions.displaySnack
 import com.example.andresvelasquez.seccion_4_weather_app.models.Day
+import com.example.andresvelasquez.seccion_4_weather_app.models.Hour
 import com.example.andresvelasquez.seccion_4_weather_app.models.Weather
 import kotlinx.android.synthetic.main.activity_main.btn_daily_weather
 import kotlinx.android.synthetic.main.activity_main.btn_hourly_weather
@@ -35,9 +37,11 @@ class MainActivity : AppCompatActivity() {
   val TAG = MainActivity::class.java.simpleName
   //inicializa la variable justo cuando esta va a ser usada
   lateinit var days: ArrayList<Day>
+  lateinit var hours: ArrayList<Hour>
 
   companion object {
     val DAILY_WEATHER = "DAILY_WEATHER"
+    val HOURLY_WEATHER = "HOURLY_WEATHER"
   }
 
   override fun onCreate(savedInstanceState: Bundle?) {
@@ -75,6 +79,7 @@ class MainActivity : AppCompatActivity() {
           val currentWeather = getCurrentWeatherFromJSON(response = responseJson)
 
           days = getDailyWeatherFromJSON(responseJson)
+          hours = getHourlyWeatherFromJSON(responseJson)
           bindCurrentWeather(currentWeather)
 
         },
@@ -114,9 +119,12 @@ class MainActivity : AppCompatActivity() {
   }
 
   fun startHourlyActivity() {
-    val intent = Intent()
-    intent.setClass(this, HourlyWeatherActivity::class.java)
+    val intent = Intent(this, HourlyWeatherActivity::class.java).apply {
+      putParcelableArrayListExtra(HOURLY_WEATHER, hours)
+
+    }
     startActivity(intent)
+
   }
 
   fun startDailyActivity() {
