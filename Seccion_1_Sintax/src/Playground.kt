@@ -14,26 +14,17 @@ class Playground {
 
   companion object {
 
-    fun firstDuplicate(a: MutableList<Int>): Int {
 
-      var result = -1
+    fun firstDuplicate(arr: MutableList<Int>): Int {
 
-      for (i in 0 until a.size - 1)
-        if (a[abs(a[i])-1] < 0 ) {
-          result = a[i]
-          break
-        }
-        else{
-          a[abs(a[i])-1] = -a[abs(a[i])-1]
-        }
+      for (i in 0 until arr.size) {
+        val value = Math.abs(arr[i])
 
-      // optional restore the negative numbers back to positive
-      for (i in 0 until a.size - 1)
-        if (a[i] < 0){
-          a[i] = -a[i]
-        }
+        if (arr[value - 1] < 0) return value
 
-      return result * -1
+        arr[value - 1] = -arr[value - 1]
+      }
+      return -1
 
     }
   }
